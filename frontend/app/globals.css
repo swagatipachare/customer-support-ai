@@ -1,0 +1,111 @@
+@import "tailwindcss";
+
+:root {
+  --bg: #0b0e17;
+  --surface: rgba(255, 255, 255, 0.04);
+  --surface-2: rgba(255, 255, 255, 0.06);
+  --border: rgba(255, 255, 255, 0.09);
+  --text: #f1f2f6;
+  --text-muted: #9198ab;
+  --amber: #ffb020;
+  --teal: #4fd1c5;
+  --violet: #a78bfa;
+  --rose: #fb7185;
+  --sky: #60a5fa;
+  --grad-1: #6366f1;
+  --grad-2: #a855f7;
+}
+
+body {
+  background:
+    linear-gradient(rgba(8, 10, 16, 0.55), rgba(8, 10, 16, 0.55)),
+    url('/bg.png') center center / cover no-repeat fixed;
+  color: var(--text);
+  font-family: var(--font-body), sans-serif;
+}
+.font-display {
+  font-family: var(--font-display), sans-serif;
+}
+.font-mono {
+  font-family: var(--font-mono), monospace;
+}
+
+.bg-orbs {
+  position: fixed;
+  inset: 0;
+  overflow: hidden;
+  z-index: 0;
+  pointer-events: none;
+}
+.orb {
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(90px);
+  opacity: 0.35;
+}
+.orb-1 {
+  width: 480px; height: 480px;
+  background: #6366f1;
+  top: -140px; left: -100px;
+  animation: float-1 14s ease-in-out infinite;
+}
+.orb-2 {
+  width: 420px; height: 420px;
+  background: #a855f7;
+  bottom: -160px; right: -80px;
+  animation: float-2 16s ease-in-out infinite;
+}
+.orb-3 {
+  width: 320px; height: 320px;
+  background: #4fd1c5;
+  top: 40%; left: 60%;
+  opacity: 0.18;
+  animation: float-1 20s ease-in-out infinite reverse;
+}
+
+@keyframes float-1 {
+  0%, 100% { transform: translate(0, 0); }
+  50% { transform: translate(40px, 30px); }
+}
+@keyframes float-2 {
+  0%, 100% { transform: translate(0, 0); }
+  50% { transform: translate(-30px, -40px); }
+}
+
+.glass {
+  background: rgba(11, 14, 23, 0.82);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid var(--border);
+}
+
+.chat-scroll::-webkit-scrollbar { width: 6px; }
+.chat-scroll::-webkit-scrollbar-thumb {
+  background: rgba(255,255,255,0.15);
+  border-radius: 999px;
+}
+
+@keyframes pulse-dot {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.3; }
+}
+.pulse-dot { animation: pulse-dot 1.6s ease-in-out infinite; }
+
+@keyframes rise-in {
+  from { opacity: 0; transform: translateY(8px) scale(0.98); }
+  to { opacity: 1; transform: translateY(0) scale(1); }
+}
+.rise-in { animation: rise-in 0.28s ease-out; }
+
+.gradient-btn {
+  background: linear-gradient(135deg, var(--grad-1), var(--grad-2));
+}
+.gradient-btn:hover {
+  filter: brightness(1.1);
+}
+.gradient-text {
+  background: linear-gradient(135deg, #818cf8, #e879f9);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
