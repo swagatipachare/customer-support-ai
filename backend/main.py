@@ -24,6 +24,17 @@ from tickets import create_ticket, get_all_tickets, resolve_ticket
 
 app = FastAPI()
 
+# Build the vector store on startup if it doesn't exist yet (needed for cloud deployments)
+@app.on_event("startup")
+def build_vectorstore_if_missing():
+    vectorstore_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), "vectorstore", "faiss_index.bin")
+    if not os.path.exists(vectorstore_path):
+        print("Vector store not found — building it now...")
+        build_vectorstore()
+        print("Vector store built successfully.")
+    else:
+        print("Vector store already exists, skipping build.")
+
 app.add_middleware(
     CORSMiddleware,
     allow_origins=["*"],
