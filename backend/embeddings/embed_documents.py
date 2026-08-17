@@ -2,7 +2,7 @@ import os
 import sys
 import pickle
 import numpy as np
-from sentence_transformers import SentenceTransformer
+from fastembed import TextEmbedding
 import faiss
 
 # Allow importing chunker.py from ../rag
@@ -18,11 +18,11 @@ def build_vectorstore():
     chunks = load_and_chunk_all_pdfs()
     texts = [c["text"] for c in chunks]
 
-    print(f"Loading embedding model (first run downloads it, be patient)...")
-    model = SentenceTransformer("sentence-transformers/all-MiniLM-L6-v2")
+    print("Loading embedding model (first run downloads it, be patient)...")
+    model = TextEmbedding(model_name="BAAI/bge-small-en-v1.5")
 
     print(f"Generating embeddings for {len(texts)} chunks...")
-    embeddings = model.encode(texts, show_progress_bar=True)
+    embeddings = list(model.embed(texts))
     embeddings = np.array(embeddings).astype("float32")
 
     print("Building FAISS index...")

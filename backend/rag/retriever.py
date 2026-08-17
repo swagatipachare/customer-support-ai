@@ -1,14 +1,14 @@
 import os
 import pickle
 import numpy as np
-from sentence_transformers import SentenceTransformer
+from fastembed import TextEmbedding
 import faiss
 
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 VECTORSTORE_DIR = os.path.join(BASE_DIR, "..", "vectorstore")
 
 # Load model, index, and metadata once (reused across queries)
-model = SentenceTransformer("sentence-transformers/all-MiniLM-L6-v2")
+model = TextEmbedding(model_name="BAAI/bge-small-en-v1.5")
 index = faiss.read_index(os.path.join(VECTORSTORE_DIR, "faiss_index.bin"))
 
 with open(os.path.join(VECTORSTORE_DIR, "chunks_metadata.pkl"), "rb") as f:
@@ -17,7 +17,7 @@ with open(os.path.join(VECTORSTORE_DIR, "chunks_metadata.pkl"), "rb") as f:
 
 def retrieve_relevant_chunks(query, top_k=3):
     """Given a user question, return the top_k most relevant chunks."""
-    query_embedding = model.encode([query]).astype("float32")
+    query_embedding = np.array(list(model.embed([query]))).astype("float32")
     distances, indices = index.search(query_embedding, top_k)
 
     results = []
