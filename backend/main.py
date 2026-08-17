@@ -11,6 +11,13 @@ sys.path.append(os.path.join(os.path.dirname(os.path.abspath(__file__)), "auth")
 sys.path.append(os.path.join(os.path.dirname(os.path.abspath(__file__)), "rag"))
 sys.path.append(os.path.join(os.path.dirname(os.path.abspath(__file__)), "embeddings"))
 
+_vectorstore_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), "vectorstore", "faiss_index.bin")
+if not os.path.exists(_vectorstore_path):
+    print("Vector store not found — building it now (this may take a minute)...")
+    from embed_documents import build_vectorstore
+    build_vectorstore()
+    print("Vector store built successfully.")
+
 # Now these custom imports will all work correctly
 from router import route_query
 from mongo import save_message, get_conversation_history, get_analytics
