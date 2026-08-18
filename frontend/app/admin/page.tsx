@@ -5,6 +5,8 @@ import axios from "axios";
 import { Sparkles, FileText, Upload, Trash2, ArrowLeft, Loader2, Inbox, BarChart3 } from "lucide-react";
 import Link from "next/link";
 
+const API_URL = process.env.NEXT_PUBLIC_API_URL || "http://127.0.0.1:8000";
+
 type Doc = { name: string; size_kb: number };
 
 export default function AdminDashboard() {
@@ -21,7 +23,7 @@ export default function AdminDashboard() {
   const fetchDocs = async () => {
     setLoading(true);
     try {
-      const res = await axios.get("http://127.0.0.1:8000/admin/documents", {
+      const res = await axios.get(`${API_URL}/admin/documents`, {
         headers: { Authorization: `Bearer ${getToken()}` },
       });
       setDocs(res.data.documents);
@@ -56,7 +58,7 @@ export default function AdminDashboard() {
     formData.append("file", file);
 
     try {
-      await axios.post("http://127.0.0.1:8000/admin/documents/upload", formData, {
+      await axios.post(`${API_URL}/admin/documents/upload`, formData, {
         headers: {
           Authorization: `Bearer ${getToken()}`,
           "Content-Type": "multipart/form-data",
@@ -76,7 +78,7 @@ export default function AdminDashboard() {
     setDeletingName(filename);
     setMessage(null);
     try {
-      await axios.delete(`http://127.0.0.1:8000/admin/documents/${filename}`, {
+      await axios.delete(`${API_URL}/admin/documents/${filename}`, {
         headers: { Authorization: `Bearer ${getToken()}` },
       });
       setMessage({ type: "success", text: `${filename} deleted and knowledge base re-indexed.` });
@@ -130,6 +132,7 @@ export default function AdminDashboard() {
           </Link>
         </div>
       </header>
+
       <main className="relative z-10 flex-1 max-w-3xl w-full mx-auto px-4 pb-8">
         {message && (
           <div
@@ -143,7 +146,6 @@ export default function AdminDashboard() {
           </div>
         )}
 
-        {/* Upload box */}
         <label
           className="glass rounded-3xl p-8 flex flex-col items-center justify-center gap-3 mb-6 cursor-pointer hover:bg-white/5 transition-colors border-dashed"
           style={{ borderWidth: 2, borderStyle: "dashed" }}
@@ -172,7 +174,6 @@ export default function AdminDashboard() {
           )}
         </label>
 
-        {/* Document list */}
         <div className="glass rounded-3xl overflow-hidden">
           <div className="px-5 py-3 border-b border-[--border] flex items-center justify-between">
             <span className="font-mono text-[11px] text-[--text-muted]">

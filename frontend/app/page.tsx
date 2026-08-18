@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 import { useState, useRef, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import axios from "axios";
@@ -25,6 +25,9 @@ import {
   MessageCircle,
 } from "lucide-react";
 
+const API_URL = process.env.NEXT_PUBLIC_API_URL || "http://127.0.0.1:8000";
+const WHATSAPP_NUMBER = "918975265237";
+
 type Message = {
   role: "user" | "bot";
   text: string;
@@ -49,8 +52,6 @@ const SUGGESTIONS = [
   "My device won't turn on",
   "Do you offer EMI options?",
 ];
-
-const WHATSAPP_NUMBER = "918975265237";
 
 export default function Home() {
   const [messages, setMessages] = useState<Message[]>([]);
@@ -95,7 +96,7 @@ export default function Home() {
       prev.map((m, i) => (i === index ? { ...m, feedbackGiven: rating } : m))
     );
     try {
-      await axios.post("http://127.0.0.1:8000/feedback", {
+      await axios.post(`${API_URL}/feedback`, {
         session_id: sessionId.current,
         user_message: msg.userMessage || "",
         answer: msg.text,
@@ -103,7 +104,7 @@ export default function Home() {
         rating: rating,
       });
     } catch {
-      // fail silently — feedback is non-critical
+      // fail silently
     }
   };
 
@@ -111,7 +112,7 @@ export default function Home() {
     setShowSummary(true);
     setSummaryLoading(true);
     try {
-      const res = await axios.get(`http://127.0.0.1:8000/summary/${sessionId.current}`);
+      const res = await axios.get(`${API_URL}/summary/${sessionId.current}`);
       setSummary(res.data.summary);
     } catch {
       setSummary("Couldn't generate a summary right now. Please try again.");
@@ -139,7 +140,7 @@ export default function Home() {
 
     try {
       const res = await axios.post(
-        "http://127.0.0.1:8000/chat",
+        `${API_URL}/chat`,
         { session_id: sessionId.current, message: text },
         { headers: { Authorization: `Bearer ${localStorage.getItem("token")}` } }
       );
@@ -290,6 +291,7 @@ export default function Home() {
                   </button>
                 ))}
               </div>
+              
               <a
                 href={`https://wa.me/${WHATSAPP_NUMBER}?text=Hi%2C%20I%20need%20help%20with%20my%20TechMart%20order`}
                 target="_blank"
@@ -360,7 +362,8 @@ export default function Home() {
                         <Ticket size={12} />
                         Ticket created: {msg.ticketId}
                       </div>
-                      <a
+                      
+              <a
                         href={`https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(
                           `Hi, I need help with my TechMart support ticket ${msg.ticketId}. My question was: "${msg.userMessage}"`
                         )}`}
@@ -507,3 +510,4 @@ export default function Home() {
     </div>
   );
 }
+

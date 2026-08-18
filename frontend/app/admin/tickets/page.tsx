@@ -5,6 +5,8 @@ import axios from "axios";
 import { Sparkles, ArrowLeft, Loader2, AlertCircle, CheckCircle2, Send } from "lucide-react";
 import Link from "next/link";
 
+const API_URL = process.env.NEXT_PUBLIC_API_URL || "http://127.0.0.1:8000";
+
 type TicketType = {
   ticket_id: string;
   session_id: string;
@@ -30,7 +32,7 @@ export default function TicketQueue() {
   const fetchTickets = async (status: string) => {
     setLoading(true);
     try {
-      const res = await axios.get(`http://127.0.0.1:8000/admin/tickets?status=${status}`, {
+      const res = await axios.get(`${API_URL}/admin/tickets?status=${status}`, {
         headers: { Authorization: `Bearer ${getToken()}` },
       });
       setTickets(res.data.tickets);
@@ -57,7 +59,7 @@ export default function TicketQueue() {
     setSubmitting(ticketId);
     try {
       await axios.post(
-        `http://127.0.0.1:8000/admin/tickets/${ticketId}/resolve`,
+        `${API_URL}/admin/tickets/${ticketId}/resolve`,
         { human_response: reply },
         { headers: { Authorization: `Bearer ${getToken()}` } }
       );

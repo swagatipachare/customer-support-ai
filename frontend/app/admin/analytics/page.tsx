@@ -5,6 +5,8 @@ import axios from "axios";
 import { Sparkles, ArrowLeft, Loader2, MessageSquare, ThumbsUp, Users, BarChart3 } from "lucide-react";
 import Link from "next/link";
 
+const API_URL = process.env.NEXT_PUBLIC_API_URL || "http://127.0.0.1:8000";
+
 type Analytics = {
   total_conversations: number;
   total_messages: number;
@@ -33,7 +35,7 @@ export default function AnalyticsDashboard() {
       return;
     }
     axios
-      .get("http://127.0.0.1:8000/admin/analytics", {
+      .get(`${API_URL}/admin/analytics`, {
         headers: { Authorization: `Bearer ${token}` },
       })
       .then((res) => setData(res.data))

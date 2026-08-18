@@ -1,10 +1,10 @@
-from fastapi import FastAPI, Depends, HTTPException, UploadFile, File, Header
+﻿from fastapi import FastAPI, Depends, HTTPException, UploadFile, File, Header
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
 from pymongo.errors import DuplicateKeyError
 import sys, os, shutil
 
-# Make sub-folders importable — ALL of these must come first
+# Make sub-folders importable â€” ALL of these must come first
 sys.path.append(os.path.join(os.path.dirname(os.path.abspath(__file__)), "agents"))
 sys.path.append(os.path.join(os.path.dirname(os.path.abspath(__file__)), "database"))
 sys.path.append(os.path.join(os.path.dirname(os.path.abspath(__file__)), "auth"))
@@ -13,7 +13,7 @@ sys.path.append(os.path.join(os.path.dirname(os.path.abspath(__file__)), "embedd
 
 _vectorstore_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), "vectorstore", "faiss_index.bin")
 if not os.path.exists(_vectorstore_path):
-    print("Vector store not found — building it now (this may take a minute)...")
+    print("Vector store not found â€” building it now (this may take a minute)...")
     from embed_documents import build_vectorstore
     build_vectorstore()
     print("Vector store built successfully.")
@@ -36,7 +36,7 @@ app = FastAPI()
 def build_vectorstore_if_missing():
     vectorstore_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), "vectorstore", "faiss_index.bin")
     if not os.path.exists(vectorstore_path):
-        print("Vector store not found — building it now...")
+        print("Vector store not found â€” building it now...")
         build_vectorstore()
         print("Vector store built successfully.")
     else:
@@ -44,7 +44,7 @@ def build_vectorstore_if_missing():
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],
+    allow_origins=["http://localhost:3000"],
     allow_methods=["*"],
     allow_headers=["*"],
 )

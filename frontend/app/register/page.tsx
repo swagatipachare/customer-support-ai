@@ -5,6 +5,8 @@ import axios from "axios";
 import { Sparkles, Mail, Lock, User } from "lucide-react";
 import Link from "next/link";
 
+const API_URL = process.env.NEXT_PUBLIC_API_URL || "http://127.0.0.1:8000";
+
 export default function Register() {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
@@ -19,7 +21,7 @@ const [success, setSuccess] = useState(false);
     setError("");
     setLoading(true);
     try {
-      await axios.post("http://127.0.0.1:8000/register", { name, email, password });
+            await axios.post(`${API_URL}/register`, { name, email, password });
       setSuccess(true);
       setTimeout(() => router.push("/login"), 1500);
     } catch (err: any) {

@@ -5,6 +5,8 @@ import axios from "axios";
 import { Sparkles, Mail, Lock } from "lucide-react";
 import Link from "next/link";
 
+const API_URL = process.env.NEXT_PUBLIC_API_URL || "http://127.0.0.1:8000";
+
 export default function Login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -16,7 +18,7 @@ export default function Login() {
     setError("");
     setLoading(true);
     try {
-      const res = await axios.post("http://127.0.0.1:8000/login", { email, password });
+      const res = await axios.post(`${API_URL}/login`, { email, password });
       localStorage.setItem("token", res.data.access_token);
       localStorage.setItem("name", res.data.name);
       router.push("/");
