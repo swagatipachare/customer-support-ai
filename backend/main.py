@@ -44,7 +44,7 @@ def build_vectorstore_if_missing():
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["http://localhost:3000"],
+    allow_origins=["http://localhost:3000", "https://your-actual-vercel-url.vercel.app"],
     allow_methods=["*"],
     allow_headers=["*"],
 )
