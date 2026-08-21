@@ -2,6 +2,14 @@
 
 An AI-powered customer support platform for a fictional electronics retailer, **TechMart Electronics**, built using Retrieval-Augmented Generation (RAG) and a multi-agent architecture. Customer questions are automatically classified, routed to the right specialist AI agent, and answered using the company's real knowledge base documents.
 
+## Live Demo
+
+- **App (frontend):** https://customer-support-ai-teal-nu.vercel.app
+- **API (backend):** https://techmart-support-backend-l6gu.onrender.com
+- **API docs:** https://techmart-support-backend-l6gu.onrender.com/docs
+
+> Note: the backend runs on Render's free tier and may take up to a minute to "wake up" if it's been idle. The first request after inactivity can be slow — subsequent requests are fast.
+
 ---
 
 ## Features
@@ -35,13 +43,14 @@ An AI-powered customer support platform for a fictional electronics retailer, **
 |---|---|
 | Frontend | Next.js (React), TypeScript, Tailwind CSS |
 | Backend | Python, FastAPI |
-| LLM | Llama 3 via Groq API |
-| Embeddings | sentence-transformers/all-MiniLM-L6-v2 |
+| LLM | Llama-family models via Groq API |
+| Embeddings | FastEmbed (BAAI/bge-small-en-v1.5) |
 | Vector Database | FAISS |
 | Database | MongoDB Atlas |
 | Auth | JWT (python-jose) + bcrypt password hashing |
 | Email | SendGrid |
 | Voice | Web Speech API (SpeechRecognition + SpeechSynthesis) |
+| Deployment | Vercel (frontend), Render (backend), MongoDB Atlas (database) |
 
 ---
 
@@ -72,7 +81,7 @@ customer-support-ai/
 
 ---
 
-## Setup Instructions
+## Setup Instructions (Local Development)
 
 ### Prerequisites
 - Python 3.11+
@@ -120,6 +129,14 @@ Backend runs at `http://127.0.0.1:8000` — interactive API docs at `/docs`.
 ```bash
 cd frontend
 npm install
+```
+
+Create `frontend/.env.local`:
+```
+NEXT_PUBLIC_API_URL=http://127.0.0.1:8000
+```
+
+```bash
 npm run dev
 ```
 Frontend runs at `http://localhost:3000`.
@@ -129,6 +146,20 @@ Frontend runs at `http://localhost:3000`.
 2. Log in
 3. Start chatting — try: *"What is your refund policy?"*
 4. Visit `/admin` (logged in) for the Knowledge Base Admin, Ticket Queue, and Analytics dashboards
+
+---
+
+## Deployment
+
+This project is deployed with a fully cloud-hosted architecture:
+
+| Component | Platform | Live URL |
+|---|---|---|
+| Frontend | Vercel | https://customer-support-ai-teal-nu.vercel.app |
+| Backend | Render | https://techmart-support-backend-l6gu.onrender.com |
+| Database | MongoDB Atlas | (cloud-hosted, not publicly browsable) |
+
+To redeploy your own instance: connect this repository to Vercel (root directory `frontend`, environment variable `NEXT_PUBLIC_API_URL` pointing to your backend) and to Render (root directory `backend`, start command `uvicorn main:app --host 0.0.0.0 --port $PORT`, with the same environment variables as the local `.env` file above). Add your Vercel URL to the `allow_origins` list in `backend/main.py`.
 
 ---
 
@@ -142,8 +173,9 @@ The `datasets/` folder (Banking77, SQuAD, CFPB, DailyDialog, MS MARCO) contains 
 
 - Source code (this repository)
 - Knowledge base documents (`knowledge_base/`)
-- Project report (see `/docs`)
-- Demo video (see submission)
+- Project report
+- Demo video
+- Live deployment links (above)
 
 ---
 
